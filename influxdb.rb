@@ -73,7 +73,7 @@ module Sensu::Extension
         @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]] ||= []
 
         @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]].push([key, values, time.to_i].join(' '))
-        flush_buffer if buffer_size >= @influx_conf['buffer_max_size']
+        flush_buffer if buffer_size >= @influx_conf['buffer_max_size'].to_i
       end
 
       yield('', 0)
@@ -109,7 +109,7 @@ module Sensu::Extension
 
     def parse_event(event_data)
       begin
-        event = MultiJson.load(event_data)
+        event = MultiJson.load(event_data, :symbolize_keys => true)
 
         # default values
         # n, u, ms, s, m, and h (default community plugins use standard epoch date)
