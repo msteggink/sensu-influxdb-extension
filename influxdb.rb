@@ -22,7 +22,7 @@ module Sensu::Extension
 
     def post_init()
       @influx_conf = parse_settings
-      logger.info("InfluxDB extension initialiazed using #{@influx_conf['protocol'] }://#{ @influx_conf['host'] }:#{ @influx_conf['port'] } - Defaults : db=#{@influx_conf['database']} precision=#{@influx_conf['time_precision']}")
+      logger.info("InfluxDB extension initialized using #{@influx_conf['protocol'] }://#{ @influx_conf['host'] }:#{ @influx_conf['port'] } - Defaults : db=#{@influx_conf['database']} precision=#{@influx_conf['time_precision']}")
 
       @buffer = {}
       @flush_timer = EventMachine::PeriodicTimer.new(@influx_conf['buffer_max_age'].to_i) do
