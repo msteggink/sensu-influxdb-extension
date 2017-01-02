@@ -31,7 +31,7 @@ module Sensu::Extension
           flush_buffer
         end
       end
-      logger.info("InfluxDB write buffer initiliazed : buffer flushed every #{@influx_conf['buffer_max_size']} points OR every #{@influx_conf['buffer_max_age']} seconds) ")
+      logger.info("InfluxDB write buffer initialized: buffer flushed every #{@influx_conf['buffer_max_size']} points OR every #{@influx_conf['buffer_max_age']} seconds) ")
     end
 
     def run(event_data)
