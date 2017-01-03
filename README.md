@@ -8,6 +8,9 @@ Since Sensu already uses [eventmachine](https://github.com/eventmachine/eventmac
 By default, this extension uses in memory metrics caching : it makes InfluxDB writes batched.
 This cache is flushed every __500 items__ or __6 seconds__ (this values can be changed in conf).
 
+Tested on:
+Sensu 0.26.5-2 and InfluxDB 1.1.1-1
+
 ## Caveat
 * SSL/TLS connection to InfluxDB is still broken in Sensu `0.20.6`. We're waiting for a Ruby / EM upgrade in Sensu project :
     * https://github.com/sensu/sensu/issues/1084
