@@ -4,6 +4,7 @@ This extension uses InfluxDB [Line Protocol](https://influxdb.com/docs/v0.9/writ
 
 Since Sensu already uses [eventmachine](https://github.com/eventmachine/eventmachine), you just have to ensure that em-http-request gem is present inside Sensu's embedded Ruby :
 * `em-http-request` ruby gem
+* `multi_json` ruby gem
 
 By default, this extension uses in memory metrics caching : it makes InfluxDB writes batched.
 This cache is flushed every __500 items__ or __6 seconds__ (this values can be changed in conf).
