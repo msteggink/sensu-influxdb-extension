@@ -22,7 +22,7 @@ module Sensu::Extension
 
     def post_init()
       @influx_conf = parse_settings
-      logger.info("InfluxDB extension initialiazed using #{@influx_conf['protocol'] }://#{ @influx_conf['host'] }:#{ @influx_conf['port'] } - Defaults : db=#{@influx_conf['database']} precision=#{@influx_conf['time_precision']}")
+      logger.info("InfluxDB extension initialized using #{@influx_conf['protocol'] }://#{ @influx_conf['host'] }:#{ @influx_conf['port'] } - Defaults : db=#{@influx_conf['database']} precision=#{@influx_conf['time_precision']}")
 
       @buffer = {}
       @flush_timer = EventMachine::PeriodicTimer.new(@influx_conf['buffer_max_age'].to_i) do
@@ -31,7 +31,7 @@ module Sensu::Extension
           flush_buffer
         end
       end
-      logger.info("InfluxDB write buffer initiliazed : buffer flushed every #{@influx_conf['buffer_max_size']} points OR every #{@influx_conf['buffer_max_age']} seconds) ")
+      logger.info("InfluxDB write buffer initialized: buffer flushed every #{@influx_conf['buffer_max_size']} points OR every #{@influx_conf['buffer_max_age']} seconds) ")
     end
 
     def run(event_data)
@@ -73,7 +73,7 @@ module Sensu::Extension
         @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]] ||= []
 
         @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]].push([key, values, time.to_i].join(' '))
-        flush_buffer if buffer_size >= @influx_conf['buffer_max_size']
+        flush_buffer if buffer_size >= @influx_conf['buffer_max_size'].to_i
       end
 
       yield('', 0)
@@ -109,7 +109,7 @@ module Sensu::Extension
 
     def parse_event(event_data)
       begin
-        event = MultiJson.load(event_data)
+        event = MultiJson.load(event_data, :symbolize_keys => true)
 
         # default values
         # n, u, ms, s, m, and h (default community plugins use standard epoch date)
