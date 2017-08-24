@@ -73,8 +73,16 @@ module Sensu::Extension
 
         @buffer[event[:check][:influxdb][:database]] ||= {}
         @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]] ||= []
-
-        @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]].push([key, values, time.to_i].join(' '))
+        if #{ event[:check][:name] } =~ /^Check/ then
+          values = "value=#{ event[:check][:status] }"
+          values += ",duration=#{event[:check][:duration].to_f}"
+          time = event[:check][:executed]
+          # logger.info("Check detected: #{key } #{ values} #{ time }")
+          @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]].push([key, values, time.to_i].join(' '))
+        else
+          # logger.info('Metric detected')
+          @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]].push([key, values, time.to_i].join(' '))
+        end
         flush_buffer if buffer_size >= @influx_conf['buffer_max_size'].to_i
       end
 
