@@ -22,7 +22,7 @@ module Sensu::Extension
 
     def post_init()
       @influx_conf = parse_settings
-      logger.info("InfluxDB 1.3 extension initialized using #{@influx_conf['protocol'] }://#{ @influx_conf['host'] }:#{ @influx_conf['port'] } - Defaults : db=#{@influx_conf['database']} precision=#{@influx_conf['time_precision']}")
+      logger.info("InfluxDB extension initialized using #{@influx_conf['protocol'] }://#{ @influx_conf['host'] }:#{ @influx_conf['port'] } - Defaults : db=#{@influx_conf['database']} precision=#{@influx_conf['time_precision']}")
 
       @buffer = {}
       @flush_timer = EventMachine::PeriodicTimer.new(@influx_conf['buffer_max_age'].to_i) do
@@ -73,14 +73,14 @@ module Sensu::Extension
 
         @buffer[event[:check][:influxdb][:database]] ||= {}
         @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]] ||= []
-        if key =~ /Check/ then
+        if #{ event[:check][:name] } =~ /^Check/ then
           values = "value=#{ event[:check][:status] }"
           values += ",duration=#{event[:check][:duration].to_f}"
           time = event[:check][:executed]
-          logger.info("Check detected: #{key } #{ values} #{ time }")
+          # logger.info("Check detected: #{key } #{ values} #{ time }")
           @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]].push([key, values, time.to_i].join(' '))
         else
-          logger.info('Metric detected')
+          # logger.info('Metric detected')
           @buffer[event[:check][:influxdb][:database]][event[:check][:time_precision]].push([key, values, time.to_i].join(' '))
         end
         flush_buffer if buffer_size >= @influx_conf['buffer_max_size'].to_i
